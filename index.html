@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tech.Care — Patient Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap"
+    />
+
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+
+    <script src="vendor/chart.umd.js" defer></script>
+    <script type="module" src="js/main.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <p id="app-status" class="app-status" role="status">
+        Loading patient dashboard…
+      </p>
+
+      <div id="dashboard" class="dashboard" hidden>
+        <header class="app-header">
+          <h1 class="brand">
+            <svg class="brand__mark" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 7 10 3v8L3 15z" fill="currentColor" />
+              <path d="m10 11 7-4v8l-7 4z" fill="var(--color-accent)" />
+            </svg>
+            Tech.Care
+          </h1>
+
+          <nav class="main-nav" aria-label="Main">
+            <ul class="main-nav__list">
+              <li>
+                <button type="button" class="nav-item">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" />
+                  </svg>
+                  Overview
+                </button>
+              </li>
+              <li>
+                <button type="button" class="nav-item nav-item--active" aria-current="page">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="9" cy="8" r="3.2" />
+                    <path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5" />
+                    <circle cx="17" cy="9" r="2.4" />
+                    <path d="M16 14.8c2.8-.4 5 1.6 5 5.2" />
+                  </svg>
+                  Patients
+                </button>
+              </li>
+              <li>
+                <button type="button" class="nav-item">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3.5" y="5" width="17" height="15.5" rx="2.5" />
+                    <path d="M8 3v4M16 3v4M3.5 10h17" />
+                  </svg>
+                  Schedule
+                </button>
+              </li>
+              <li>
+                <button type="button" class="nav-item">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M20.5 12c0 3.9-3.8 7-8.5 7-1 0-2-.1-2.9-.4L4 20.5l1.4-3.6A6.6 6.6 0 0 1 3.5 12c0-3.9 3.8-7 8.5-7s8.5 3.1 8.5 7z" />
+                  </svg>
+                  Message
+                </button>
+              </li>
+              <li>
+                <button type="button" class="nav-item">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="2.5" y="5.5" width="19" height="13" rx="2.5" />
+                    <path d="M2.5 10h19" />
+                  </svg>
+                  Transactions
+                </button>
+              </li>
+            </ul>
+          </nav>
+
+          <div class="doctor">
+            <span class="avatar avatar--small">
+              <span class="avatar__initials" aria-hidden="true">JS</span>
+            </span>
+            <span class="doctor__identity">
+              <span class="doctor__name">Dr. Jose Simmons</span>
+              <span class="doctor__role">General Practitioner</span>
+            </span>
+            <span class="doctor__controls">
+              <button type="button" class="icon-button" aria-label="Settings">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="6.2" />
+                  <circle cx="12" cy="12" r="2.6" />
+                  <path d="M12 3.2v2.2M12 18.6v2.2M20.8 12h-2.2M5.4 12H3.2M18.2 5.8l-1.6 1.6M7.4 16.6l-1.6 1.6M18.2 18.2l-1.6-1.6M7.4 7.4 5.8 5.8" />
+                </svg>
+              </button>
+              <button type="button" class="icon-button" aria-label="More options">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="5" r="1.6" fill="currentColor" stroke="none" />
+                  <circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none" />
+                  <circle cx="12" cy="19" r="1.6" fill="currentColor" stroke="none" />
+                </svg>
+              </button>
+            </span>
+          </div>
+        </header>
+
+        <main class="dashboard__columns">
+          <aside class="card patients-panel" aria-labelledby="patients-heading">
+            <div class="panel-head">
+              <h2 id="patients-heading" class="panel-title">Patients</h2>
+              <button type="button" class="icon-button" aria-label="Search patients">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="11" cy="11" r="6.5" />
+                  <path d="m16 16 5 5" />
+                </svg>
+              </button>
+            </div>
+            <ul id="patient-list" class="patient-list"></ul>
+          </aside>
+
+          <div class="centre-column">
+            <section class="card diagnosis-card" aria-labelledby="diagnosis-heading">
+              <h2 id="diagnosis-heading" class="panel-title">Diagnosis History</h2>
+
+              <div id="diagnosis-details">
+                <section class="blood-pressure" aria-labelledby="blood-pressure-heading">
+                  <div class="panel-head">
+                    <h3 id="blood-pressure-heading" class="blood-pressure__title">
+                      Blood Pressure
+                    </h3>
+                    <button type="button" class="range-control">
+                      Last 6 months
+                      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <div class="blood-pressure__body">
+                    <div class="chart-area">
+                      <canvas id="blood-pressure-chart" aria-hidden="true"></canvas>
+                      <div id="blood-pressure-data" class="visually-hidden">
+                        <table>
+                          <caption>Blood pressure readings for the last six months</caption>
+                          <thead>
+                            <tr>
+                              <th scope="col">Month</th>
+                              <th scope="col">Systolic</th>
+                              <th scope="col">Diastolic</th>
+                            </tr>
+                          </thead>
+                          <tbody id="blood-pressure-rows"></tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    <dl class="readings">
+                      <div class="reading reading--systolic">
+                        <dt class="reading__label">Systolic</dt>
+                        <dd class="reading__value" id="systolic-value"></dd>
+                        <dd class="reading__level">
+                          <span class="reading__indicator" id="systolic-indicator" aria-hidden="true"></span>
+                          <span id="systolic-level"></span>
+                        </dd>
+                      </div>
+                      <div class="reading reading--diastolic">
+                        <dt class="reading__label">Diastolic</dt>
+                        <dd class="reading__value" id="diastolic-value"></dd>
+                        <dd class="reading__level">
+                          <span class="reading__indicator" id="diastolic-indicator" aria-hidden="true"></span>
+                          <span id="diastolic-level"></span>
+                        </dd>
+                      </div>
+                    </dl>
+                  </div>
+                </section>
+
+                <ul class="vitals">
+                  <li class="vital-card vital-card--respiratory">
+                    <span class="vital-card__icon">
+                      <svg class="icon icon--large" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 3.5v8.5" />
+                        <path d="M9.5 8.5C8 7 5 7.5 4.5 10.5c-.4 2.4-.4 5 0 7.4.2 1.4 1.8 2 2.9 1.2l2.1-1.6c.6-.4 1-1.2 1-2V11c0-1-.4-1.9-1-2.5z" />
+                        <path d="M14.5 8.5c1.5-1.5 4.5-1 5 2 .4 2.4.4 5 0 7.4-.2 1.4-1.8 2-2.9 1.2l-2.1-1.6c-.6-.4-1-1.2-1-2V11c0-1 .4-1.9 1-2.5z" />
+                      </svg>
+                    </span>
+                    <h3 class="vital-card__label">Respiratory Rate</h3>
+                    <p class="vital-card__value"><span id="respiratory-value"></span> bpm</p>
+                    <p class="vital-card__level">
+                      <span class="reading__indicator" id="respiratory-indicator" aria-hidden="true"></span>
+                      <span id="respiratory-level"></span>
+                    </p>
+                  </li>
+
+                  <li class="vital-card vital-card--temperature">
+                    <span class="vital-card__icon">
+                      <svg class="icon icon--large" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M14.5 13.4V5.5a2.5 2.5 0 0 0-5 0v7.9a4.5 4.5 0 1 0 5 0z" />
+                        <path d="M12 8.5v7.2" />
+                      </svg>
+                    </span>
+                    <h3 class="vital-card__label">Temperature</h3>
+                    <p class="vital-card__value"><span id="temperature-value"></span>°F</p>
+                    <p class="vital-card__level">
+                      <span class="reading__indicator" id="temperature-indicator" aria-hidden="true"></span>
+                      <span id="temperature-level"></span>
+                    </p>
+                  </li>
+
+                  <li class="vital-card vital-card--heart-rate">
+                    <span class="vital-card__icon">
+                      <svg class="icon icon--large" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 20.5C6.5 17 3.5 13.6 3.5 10a4.5 4.5 0 0 1 8.5-2.1A4.5 4.5 0 0 1 20.5 10c0 3.6-3 7-8.5 10.5z" />
+                      </svg>
+                    </span>
+                    <h3 class="vital-card__label">Heart Rate</h3>
+                    <p class="vital-card__value"><span id="heart-rate-value"></span> bpm</p>
+                    <p class="vital-card__level">
+                      <span class="reading__indicator" id="heart-rate-indicator" aria-hidden="true"></span>
+                      <span id="heart-rate-level"></span>
+                    </p>
+                  </li>
+                </ul>
+              </div>
+
+              <p id="diagnosis-empty" class="empty-state" hidden>
+                No diagnosis history is available for this patient.
+              </p>
+            </section>
+
+            <section class="card diagnostic-card" aria-labelledby="diagnostic-list-heading">
+              <h2 id="diagnostic-list-heading" class="panel-title">Diagnostic List</h2>
+              <div class="table-scroll">
+                <table id="diagnostic-table" class="diagnostic-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Problem/Diagnosis</th>
+                      <th scope="col">Description</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="diagnostic-rows"></tbody>
+                </table>
+              </div>
+              <p id="diagnostic-empty" class="empty-state" hidden>
+                No diagnostic records are available for this patient.
+              </p>
+            </section>
+          </div>
+
+          <aside class="patient-column">
+            <section class="card profile-card" aria-labelledby="profile-name">
+              <span class="avatar avatar--large" id="profile-avatar">
+                <span class="avatar__initials" aria-hidden="true"></span>
+                <img class="avatar__image" alt="" />
+              </span>
+
+              <h2 id="profile-name" class="profile-card__name"></h2>
+
+              <dl class="profile-fields">
+                <div class="profile-field">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3.5" y="5" width="17" height="15.5" rx="2.5" />
+                    <path d="M8 3v4M16 3v4M3.5 10h17" />
+                  </svg>
+                  <dt class="profile-field__label">Date Of Birth</dt>
+                  <dd class="profile-field__value" id="profile-date-of-birth"></dd>
+                </div>
+                <div class="profile-field">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="8" r="3.5" />
+                    <path d="M5 20c0-3.9 3.1-6.5 7-6.5s7 2.6 7 6.5" />
+                  </svg>
+                  <dt class="profile-field__label">Gender</dt>
+                  <dd class="profile-field__value" id="profile-gender"></dd>
+                </div>
+                <div class="profile-field">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M7 3.5 9.5 8 7.8 10a12 12 0 0 0 6.2 6.2l2-1.7 4.5 2.5-1 3.2c-.3.9-1.2 1.4-2.1 1.2C10.6 20 4 13.4 2.8 6.6c-.2-.9.3-1.8 1.2-2.1z" />
+                  </svg>
+                  <dt class="profile-field__label">Contact Info.</dt>
+                  <dd class="profile-field__value" id="profile-phone"></dd>
+                </div>
+                <div class="profile-field">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M7 3.5 9.5 8 7.8 10a12 12 0 0 0 6.2 6.2l2-1.7 4.5 2.5-1 3.2c-.3.9-1.2 1.4-2.1 1.2C10.6 20 4 13.4 2.8 6.6c-.2-.9.3-1.8 1.2-2.1z" />
+                  </svg>
+                  <dt class="profile-field__label">Emergency Contacts</dt>
+                  <dd class="profile-field__value" id="profile-emergency-contact"></dd>
+                </div>
+                <div class="profile-field">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 2.8 20 6v6c0 4.7-3.4 8.3-8 9.2-4.6-.9-8-4.5-8-9.2V6z" />
+                    <path d="m8.5 12 2.5 2.5 4.5-5" />
+                  </svg>
+                  <dt class="profile-field__label">Insurance Provider</dt>
+                  <dd class="profile-field__value" id="profile-insurance"></dd>
+                </div>
+              </dl>
+
+              <button type="button" class="show-all-button">Show All Information</button>
+            </section>
+
+            <section class="card lab-card" aria-labelledby="lab-results-heading">
+              <h2 id="lab-results-heading" class="panel-title">Lab Results</h2>
+              <ul id="lab-result-list" class="lab-results"></ul>
+              <p id="lab-results-empty" class="empty-state" hidden>
+                No lab results are available for this patient.
+              </p>
+            </section>
+          </aside>
+        </main>
+      </div>
+    </div>
+
+    <template id="patient-template">
+      <li class="patient">
+        <span class="avatar">
+          <span class="avatar__initials" aria-hidden="true"></span>
+          <img class="avatar__image" alt="" />
+        </span>
+        <span class="patient__identity">
+          <span class="patient__name"></span>
+          <span class="patient__meta"></span>
+        </span>
+        <button type="button" class="icon-button patient__options">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none" />
+            <circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none" />
+            <circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none" />
+          </svg>
+        </button>
+      </li>
+    </template>
+
+    <template id="blood-pressure-row-template">
+      <tr>
+        <th scope="row"></th>
+        <td></td>
+        <td></td>
+      </tr>
+    </template>
+
+    <template id="diagnostic-row-template">
+      <tr>
+        <th scope="row" class="diagnostic__problem"></th>
+        <td class="diagnostic__description"></td>
+        <td class="diagnostic__status"></td>
+      </tr>
+    </template>
+
+    <template id="lab-result-template">
+      <li class="lab-result">
+        <span class="lab-result__name"></span>
+        <button type="button" class="icon-button lab-result__download">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3.5v11M7.5 10.5 12 15l4.5-4.5M4 19.5h16" />
+          </svg>
+        </button>
+      </li>
+    </template>
+  </body>
+</html>
